@@ -3,6 +3,7 @@
 ---
 
 ## Getting Ready
+
 ```
 cd ~/Developer/KorfLab/
 git clone https://github.com/iankorf/E.coli
