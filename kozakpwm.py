@@ -26,6 +26,8 @@ def read_gbff(filename):
 
 	while True:
 		line = fp.readline()
+		if line == '':
+			sys.exit(f"Error: Input file format error.")
 		line = line.rstrip()
 		if 'ORIGIN' in line:
 			origin_found = True
