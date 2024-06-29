@@ -4,7 +4,7 @@
 import argparse
 import sys
 import gzip
-
+import os
 
 def read_fasta(filename):
 	"""Iteratively read records from a FASTA file"""
@@ -92,9 +92,16 @@ def main():
 							  'Default = 3'))
 	parser.add_argument('-b', '--both_strands',
 						action='store_true',
-						help='Count k-mers on both strands')
+						help='Locate k-mers on both strands')
 
 	args = parser.parse_args()
+
+	if not os.path.exists(args.input_file):
+		sys.exit(f"Error: Input file {args.input_file} does not exist.")
+
+	if not args.input_file.endswith('.fasta') and not args.input_file.endswith('.fasta.gz') and not args.input_file.endswith('.fa.gz') and not args.input_file.endswith('.fa.gz'):
+		sys.exit(
+			"Error: Input file type error.\nFile type fasta/fa/fasta.gz/fa.gz expected.")
 
 	kmer_locations = process_fasta_file(
 		args.input_file, args.kmer_size, args.both_strands)

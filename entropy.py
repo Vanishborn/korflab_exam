@@ -103,6 +103,13 @@ def main():
 
 	args = parser.parse_args()
 
+	if not os.path.exists(args.input_file):
+		sys.exit(f"Error: Input file {args.input_file} does not exist.")
+
+	if not args.input_file.endswith('.fasta') and not args.input_file.endswith('.fasta.gz') and not args.input_file.endswith('.fa.gz') and not args.input_file.endswith('.fa.gz'):
+		sys.exit(
+			"Error: Input file type error.\nFile type fasta/fa/fasta.gz/fa.gz expected.")
+
 	if args.output:
 		if len(args.output) >= 256:
 			sys.exit(
@@ -111,11 +118,8 @@ def main():
 	else:
 		output_file = os.path.splitext(args.input_file)[0] + '.masked.fasta'
 
-	try:
-		process_fasta_file(args.input_file, output_file,
-						   args.window_size, args.threshold, args.soft_mask)
-	except Exception as e:
-		sys.exit(f"Error: {e}")
+	process_fasta_file(args.input_file, output_file,
+					   args.window_size, args.threshold, args.soft_mask)
 
 
 if __name__ == '__main__':
