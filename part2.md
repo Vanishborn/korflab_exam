@@ -59,19 +59,27 @@ Output:
 
 **Answer:**
 
-According to the `*.gbff` file, there are 4315 coding sequences?
+According to the `*.gbff` file, there are 4315 coding sequences.
 
 ## Question 3
 
 **Answer:**
 
-There are 4315 coding sequences but it encodes only 4298 proteins.
+My code:
 
-This difference in the two may have been the result of pseudogene, which are gene-looking sequences that would not contribute to the protein count, hence a smaller number of encoded proteins than coding sequences. 
+```
+gunzip -c *.gff.gz | grep -v "^#" | grep "CDS" | cut -f9 | grep "pseudo=true" | sort | uniq | wc -l
+```
 
-Also, alternative splicing might have led different coding sequences to the same protein. 
+Output:
 
-Moreover, though rare, there's always a chance for annotation errors that might contributed to this discrepancy.
+```
+17
+```
+
+**Answer:**
+
+There are 17 more CDS in the `*.gbff` file than proteins in the `*.faa` file. This difference in number is caused by non-functional features, which are labeled with "pseudo=true" in the annotation.
 
 ## Question 4
 
