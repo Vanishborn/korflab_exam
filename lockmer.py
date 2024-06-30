@@ -1,10 +1,12 @@
 #! /usr/bin/env python
 # List found kmer and their locations
+# Henry Li
 
 import argparse
 import sys
 import gzip
 import os
+
 
 def read_fasta(filename):
 	"""Iteratively read records from a FASTA file"""
@@ -48,6 +50,7 @@ def anti_seq(seq):
 
 
 def find_kmers(seq, kmer_size):
+	"""Stores all found kmers and indices on a given seq"""
 	kmers = {}
 	if len(seq) < kmer_size:
 		return kmers
@@ -67,8 +70,10 @@ def find_kmers(seq, kmer_size):
 
 
 def process_fasta_file(input_file, kmer_size, both_strands):
+	"""Reads fasta and finds all kmers and indices"""
 	for defline, seq in read_fasta(input_file):
 		kmers = find_kmers(seq, kmer_size)
+		"""Includes rev seq if both_strands = True"""
 		if both_strands:
 			rev_seq = anti_seq(seq)
 			kmers_rev = find_kmers(rev_seq, kmer_size)
@@ -81,6 +86,7 @@ def process_fasta_file(input_file, kmer_size, both_strands):
 
 
 def main():
+	"""argparse statements"""
 	parser = argparse.ArgumentParser(
 		description='Find k-mer locations in a DNA sequence.',
 		formatter_class=argparse.RawTextHelpFormatter)
@@ -96,6 +102,7 @@ def main():
 
 	args = parser.parse_args()
 
+	"""Input checks"""
 	if not os.path.exists(args.input_file):
 		sys.exit(f"Error: Input file {args.input_file} does not exist.")
 
@@ -103,6 +110,7 @@ def main():
 		sys.exit(
 			"Error: Input file type error.\nFile type fasta/fa/fasta.gz/fa.gz expected.")
 
+	"""Code body"""
 	kmer_locations = process_fasta_file(
 		args.input_file, args.kmer_size, args.both_strands)
 	for kmer, positions in sorted(kmer_locations.items()):

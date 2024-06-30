@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # Mask low entropy regions of nucleotide sequences
+# Henry Li
 
 import sys
 import gzip
@@ -42,6 +43,7 @@ def read_fasta(filename):
 
 
 def entropy_of_seq(seq):
+	"""Calculate entropy of a given DNA seq"""
 	nts = 'ACGT'
 	entropy = 0
 	for nt in nts:
@@ -52,6 +54,7 @@ def entropy_of_seq(seq):
 
 
 def mask_seq(seq, window_size, threshold, soft_mask=False):
+	"""Perform masking of windows with entropy less than threshold"""
 	seq_list = list(seq)
 	for i in range(len(seq) - window_size + 1):
 		window_seq = seq[i:i + window_size]
@@ -66,6 +69,7 @@ def mask_seq(seq, window_size, threshold, soft_mask=False):
 
 
 def process_fasta_file(input_file, output_file, window_size, threshold, soft_mask):
+	"""Read in raw fasta file, output masked fasta file"""
 	try:
 		with open(output_file, 'w') as out_file:
 			for defline, seq in read_fasta(input_file):
@@ -78,6 +82,7 @@ def process_fasta_file(input_file, output_file, window_size, threshold, soft_mas
 
 
 def main():
+	"""argparse statements"""
 	parser = argparse.ArgumentParser(
 		description='Entropy filter for DNA sequences.',
 		formatter_class=argparse.RawTextHelpFormatter)
@@ -103,6 +108,7 @@ def main():
 
 	args = parser.parse_args()
 
+	"""Input checks"""
 	if not os.path.exists(args.input_file):
 		sys.exit(f"Error: Input file {args.input_file} does not exist.")
 
@@ -110,6 +116,7 @@ def main():
 		sys.exit(
 			"Error: Input file type error.\nFile type fasta/fa/fasta.gz/fa.gz expected.")
 
+	"""Format outfile name"""
 	if args.output:
 		if len(args.output) >= 256:
 			sys.exit(
@@ -118,6 +125,7 @@ def main():
 	else:
 		output_file = os.path.splitext(args.input_file)[0] + '.masked.fasta'
 
+	"""Code body"""
 	process_fasta_file(args.input_file, output_file,
 					   args.window_size, args.threshold, args.soft_mask)
 

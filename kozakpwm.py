@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # Create a PWM of the Kozak consensus from a GBFF file
+# Henry Li
 
 import argparse
 import sys
@@ -52,6 +53,7 @@ def anti_seq(seq):
 
 
 def create_pwm(info, seq, by_nucleotide):
+	"""Creates the pwm from CDS features"""
 	if by_nucleotide:
 		pwm = {'A': [0] * 14, 'C': [0] * 14, 'G': [0] * 14, 'T': [0] * 14}
 	else:
@@ -86,6 +88,7 @@ def create_pwm(info, seq, by_nucleotide):
 
 
 def pwm_to_json(pwm, output_file):
+	"""Outputs to JSON"""
 	try:
 		with open(output_file, 'w') as out_file:
 			json.dump(pwm, out_file, indent=4)
@@ -94,6 +97,7 @@ def pwm_to_json(pwm, output_file):
 
 
 def main():
+	"""argparse statements"""
 	parser = argparse.ArgumentParser(
 		description='Create a PWM of the Kozak consensus from a GBFF file.',
 		formatter_class=argparse.RawTextHelpFormatter)
@@ -110,6 +114,14 @@ def main():
 
 	args = parser.parse_args()
 
+	"""Input checks"""
+	if not os.path.exists(args.input_file):
+		sys.exit(f"Error: Input file {args.input_file} does not exist.")
+
+	if not args.input_file.endswith('.gbff') and not args.input_file.endswith('.gbff.gz'):
+		sys.exit("Error: Input file type error.\nFile type gbff/gbff.gz expected.")
+
+	"""Format outfile name"""
 	if args.output:
 		if len(args.output) >= 256:
 			sys.exit(
@@ -118,12 +130,7 @@ def main():
 	else:
 		output_file = os.path.splitext(args.input_file)[0] + ".pwm.json"
 
-	if not os.path.exists(args.input_file):
-		sys.exit(f"Error: Input file {args.input_file} does not exist.")
-
-	if not args.input_file.endswith('.gbff') and not args.input_file.endswith('.gbff.gz'):
-		sys.exit("Error: Input file type error.\nFile type gbff/gbff.gz expected.")
-
+	"""Code body"""
 	for info, seq in read_gbff(args.input_file):
 		pwm = create_pwm(info, seq, args.by_nucleotide)
 		pwm_to_json(pwm, output_file)
