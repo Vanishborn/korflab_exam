@@ -106,7 +106,7 @@ def main():
 	if not os.path.exists(args.input_file):
 		sys.exit(f"Error: Input file {args.input_file} does not exist.")
 
-	if not args.input_file.endswith('.fasta') and not args.input_file.endswith('.fasta.gz') and not args.input_file.endswith('.fa.gz') and not args.input_file.endswith('.fa.gz'):
+	if not args.input_file.endswith('.fasta') and not args.input_file.endswith('.fasta.gz') and not args.input_file.endswith('.fa') and not args.input_file.endswith('.fa.gz'):
 		sys.exit(
 			"Error: Input file type error.\nFile type fasta/fa/fasta.gz/fa.gz expected.")
 
