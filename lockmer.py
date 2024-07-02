@@ -58,13 +58,13 @@ def find_kmers(seq, kmer_size):
 	kmer = seq[:kmer_size]
 	if kmer not in kmers:
 		kmers[kmer] = []
-	kmers[kmer].append(str(1))
+	kmers[kmer].append(1)
 
 	for i in range(1, len(seq) - kmer_size + 1):
 		kmer = kmer[1:] + seq[i + kmer_size - 1]
 		if kmer not in kmers:
 			kmers[kmer] = []
-		kmers[kmer].append(str(i + 1))
+		kmers[kmer].append(i + 1)
 
 	return kmers
 
@@ -81,7 +81,7 @@ def process_fasta_file(input_file, kmer_size, both_strands):
 				if kmer not in kmers:
 					kmers[kmer] = []
 				for p in positions:
-					kmers[kmer].append(str(-int(p)))
+					kmers[kmer].append(-int(p))
 		return kmers
 
 
@@ -114,7 +114,9 @@ def main():
 	kmer_locations = process_fasta_file(
 		args.input_file, args.kmer_size, args.both_strands)
 	for kmer, positions in sorted(kmer_locations.items()):
-		position_all = ' '.join(positions)
+		position_all = ''
+		for pos in positions:
+			position_all += (str(pos) + " ")
 		print(f"{kmer} {position_all}")
 
 
