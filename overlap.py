@@ -6,6 +6,7 @@ import sys
 import os
 import gzip
 import argparse
+import time
 
 
 def read_gff(filename):
@@ -163,9 +164,13 @@ def main():
 		output_file = f"{base1}.{base2}.overlap.tsv"
 
 	"""Code body"""
+	start_time = time.time()
 	features = read_gff(args.gff1)
 	overlaps = find_overlap(features, args.gff2)
 	write_output(overlaps, output_file)
+	end_time = time.time()
+	
+	print(f"Overlap completed in {end_time - start_time} seconds")
 
 
 if __name__ == '__main__':

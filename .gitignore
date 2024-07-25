@@ -3,3 +3,4 @@ testcases/gff1.gff
 testcases/gff2.gff
 testcases/seq.fasta
 testcases/seq_s.fasta
+.DS_Store
