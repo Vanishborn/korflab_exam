@@ -4,3 +4,6 @@ testcases/gff2.gff
 testcases/seq.fasta
 testcases/seq_s.fasta
 .DS_Store
+*.gff
+*.tsv
+experiment.py

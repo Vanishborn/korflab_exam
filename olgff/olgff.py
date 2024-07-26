@@ -99,7 +99,7 @@ def zoning(features, zone_len_marks, num_zones):
 
 def find_overlap(zoned_features1, zoned_features2):
 	"""Find overlapping features between two sets of zoned features"""
-	overlaps = set()
+	overlaps = []
 	for chr in zoned_features1:
 		for zone in zoned_features1[chr]:
 			if zone in zoned_features2[chr]:
@@ -116,9 +116,12 @@ def find_overlap(zoned_features1, zoned_features2):
 								"feature1": feature1,
 								"feature2": feature2
 								}
-							overlaps.add(str(overlap))
-	return [eval(overlap) for overlap in overlaps]
-
+							if overlap in overlaps:
+								continue
+							overlaps.append(overlap)
+			print(zone, "Overlapped")
+		print("Chromosome:", chr, "Overlapped")
+	return overlaps
 
 
 def write_output(overlaps, output_file):
@@ -186,17 +189,25 @@ else:
 """Code body"""
 start_time = time.time()
 features1 = read_gff(args.gff1)
+print("Read GFF File 1")
 features2 = read_gff(args.gff2)
+print("Read GFF File 2")
 
 features1, features2 = chr_filter(features1, features2)
+print("None Overlapping Chromosomes Filtered")
 
 zone_len_marks = find_zone_len_marks(features1, features2, args.zones)
+print("Zone Marks Established")
 
 zoned_features1 = zoning(features1, zone_len_marks, args.zones)
+print("Zoned GFF File 1 Features")
 zoned_features2 = zoning(features2, zone_len_marks, args.zones)
+print("Zoned GFF File 2 Features")
 
 overlaps = find_overlap(zoned_features1, zoned_features2)
+print("------ALL OVERLAPS FOUND------")
 write_output(overlaps, output_file)
+print("Outfile Written")
 end_time = time.time()
 
 print(f"Overlap gff features with {args.zones} zones completed in {end_time - start_time} seconds")
