@@ -13,7 +13,9 @@ args = parser.parse_args()
 
 with open(args.input, 'r') as f_in, open(args.output, 'w') as f_out:
 	for line in f_in:
+		if not line.startswith("###"):
+			continue
 		words = line.split()
-		pieces = words[4]
+		zones = words[4]
 		seconds = words[8]
-		f_out.write(f'{pieces}\t{seconds}\n')
+		f_out.write(f'{zones}\t{seconds}\n')

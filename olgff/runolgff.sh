@@ -16,6 +16,7 @@ do
 	echo "Starting outer loop iteration: $j"
 	for i in $(seq 1 $inner)
 	do
+		echo "Starting inner loop iteration: $i"
 	   ./olgff.py $gff1 $gff2 -z $i -o "overlaps${i}.tsv" >> "output${j}.txt"
 	done
 done
