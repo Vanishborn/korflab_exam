@@ -99,7 +99,7 @@ def zoning(features, zone_len_marks, num_zones):
 
 def find_overlap(zoned_features1, zoned_features2):
 	"""Find overlapping features between two sets of zoned features"""
-	overlaps = []
+	overlaps = set()
 	for chr in zoned_features1:
 		for zone in zoned_features1[chr]:
 			if zone in zoned_features2[chr]:
@@ -116,11 +116,10 @@ def find_overlap(zoned_features1, zoned_features2):
 								"feature1": feature1,
 								"feature2": feature2
 								}
-							if overlap in overlaps:
-								continue
-							overlaps.append(overlap)
+							overlaps.add(overlap)
 			print(zone, "Overlapped")
 		print("Chromosome:", chr, "Overlapped")
+	overlaps = list(overlaps)
 	return overlaps
 
 
@@ -170,13 +169,13 @@ if not os.path.exists(args.gff1):
 	sys.exit(f"Error: Input gff1 {args.gff1} does not exist.")
 
 if not args.gff1.endswith('.gff') and not args.gff1.endswith('.gff.gz'):
-	sys.exit("Error: Input gff1 type error.\nFile type gff/gff.gz expected.")
+	sys.exit(f"Error: Input gff1 type error.\nFile type gff/gff.gz expected.")
 
 if not os.path.exists(args.gff2):
 	sys.exit(f"Error: Input gff2 {args.gff2} does not exist.")
 
 if not args.gff2.endswith('.gff') and not args.gff2.endswith('.gff.gz'):
-	sys.exit("Error: Input gff2 type error.\nFile type gff/gff.gz expected.")
+	sys.exit(f"Error: Input gff2 type error.\nFile type gff/gff.gz expected.")
 
 """Format outfile name"""
 if args.output:
